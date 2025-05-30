@@ -6,7 +6,7 @@ using TelegramBot.Bot.Lib.Methods;
 using TelegramBot.Bot.Handlers.ICallbackHandlers;
 namespace TelegramBot.Bot.Handlers.CallbackHandlers;
 
-/*public class ContentHandler : ICallbackHandler
+public class ContentHandler : ICallbackHandler
 {
     public bool CanHandle(string data) => new[] { "MC", "AC", "PC" }.Contains(data);
 
@@ -14,7 +14,7 @@ namespace TelegramBot.Bot.Handlers.CallbackHandlers;
         ITelegramBotClient bot,
         CallbackQuery callbackQuery,
         Dictionary<long, string> userMoods,
-        Dictionary<long, int> userLastMessageIds, // ← додано, щоб відповідало інтерфейсу
+        Dictionary<long, int> userLastMessageIds, 
         CancellationToken cancellationToken)
     {
         string contentType = callbackQuery.Data switch
@@ -32,5 +32,5 @@ namespace TelegramBot.Bot.Handlers.CallbackHandlers;
             await BotMethod.AskNextAsync(bot, chatId, cancellationToken);
         }
     }
-}*/
+}
 

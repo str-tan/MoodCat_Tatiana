@@ -36,7 +36,7 @@ public static class BotMethod
                 InlineKeyboardButton.WithCallbackData("\U0001F504тип контенту", "HO")
             },
             new[] { InlineKeyboardButton.WithCallbackData("До головного меню", "F") },
-           new[] { InlineKeyboardButton.WithCallbackData("Очистити чат", "clear_chat") } // <-- нова кнопка
+           new[] { InlineKeyboardButton.WithCallbackData("Очистити чат", "G") } // <-- нова кнопка
         });
 
         await bot.SendTextMessageAsync(chatId, "Що далі?", replyMarkup: nextOptions, cancellationToken: cancellationToken);

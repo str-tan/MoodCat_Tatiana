@@ -8,7 +8,7 @@ namespace TelegramBot.Bot.Handlers.CallbackHandlers;
 
  public class ClearChatHandler : ICallbackHandler
 {
-    public bool CanHandle(string data) => data == "G"; // обробляє G
+     public bool CanHandle(string data) => data == "G";
 
     public async Task HandleAsync(
         ITelegramBotClient bot,
@@ -19,25 +19,31 @@ namespace TelegramBot.Bot.Handlers.CallbackHandlers;
     {
         var chatId = callbackQuery.Message.Chat.Id;
 
-        if (userLastMessageIds.TryGetValue(chatId, out int msgId))
+        // Видаляємо останні 5 повідомлень (включно з повідомленням кнопки)
+        for (int i = 0; i < 5; i++)
         {
             try
             {
-                await bot.DeleteMessageAsync(chatId, msgId, cancellationToken);
+                int messageIdToDelete = callbackQuery.Message.MessageId - i;
+                await bot.DeleteMessageAsync(chatId, messageIdToDelete, cancellationToken);
+                Console.WriteLine($"[DEBUG] Видалено повідомлення з ID: {messageIdToDelete}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[!] Не вдалося видалити повідомлення: " + ex.Message);
+                Console.WriteLine($"[ERROR] Не вдалося видалити повідомлення: {ex.Message}");
             }
-            userLastMessageIds.Remove(chatId);
         }
 
+        // Очищення настрою
         userMoods.Remove(chatId);
 
-        await bot.SendTextMessageAsync(
+        // Нове повідомлення
+        var sentMessage = await bot.SendMessage(
             chatId,
             "Чат очищено! Почнемо з чистого аркуша 🌸",
             replyMarkup: Keyboard.MainMenu,
             cancellationToken: cancellationToken);
+
+        userLastMessageIds[chatId] = sentMessage.MessageId;
     }
 }

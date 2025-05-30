@@ -14,9 +14,9 @@ namespace TelegramBot.Bot.Services
         {
             new MoodHandler(),
             new MainMenuHandler(),
-           // new ContentHandler(),
-          //  new SettingsHandler(),
-            new ClearChatHandler() // ← Додайте цей хендлер
+            new ContentHandler(),
+            new SettingsHandler(),
+            new ClearChatHandler(),
         };
         }
 

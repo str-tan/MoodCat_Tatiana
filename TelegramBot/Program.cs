@@ -6,6 +6,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 using TelegramBot.Bot.Lib.Keyboards;
+using TelegramBot.Bot.Lib.Methods;
 using TelegramBot.Bot.Services;
 
 
@@ -19,6 +20,7 @@ namespace TelegramBot
         private static CommandRouter? commandRouter;
         private static Dictionary<long, string> userMoods = new();
         private static Dictionary<long, int> userLastMessageIds = new();
+
 
         static async Task Main()
         {
@@ -44,27 +46,36 @@ namespace TelegramBot
             cts.Cancel();
         }
 
+        private static async Task<Task> ErrorHandler(ITelegramBotClient client, Exception exception, HandleErrorSource source, CancellationToken token)
+        {
+            Console.WriteLine($"Помилка: {exception.Message}");
+            return Task.CompletedTask;
+        }
+
         private static async Task UpdateHandler(ITelegramBotClient bot, Update update, CancellationToken cancellationToken)
         {
             if (update.Message is { Text: not null } message)
             {
                 if (message.Text == "/start")
                 {
-                    await bot.SendMessage(
-                        chatId: message.Chat.Id,
-                        text: "Привіт! Я MoodCat, твій пухнастий помічник у світі настроїв! Обери, що тобі потрібно:",
-                        replyMarkup: Keyboard.MainMenu,
-                        cancellationToken: cancellationToken
+                    await BotUtils.SendMessageReplacingOldAsync(
+                        bot,
+                        message.Chat.Id,
+                        "Привіт! Я MoodCat, твій пухнастий помічник у світі настроїв! Обери, що тобі потрібно:",
+                        Keyboard.MainMenu,
+                        userLastMessageIds,
+                        cancellationToken
                     );
                 }
-
-                if (message.Text != "/start")
+                else
                 {
-                    await bot.SendMessage(
-                        chatId: message.Chat.Id,
-                        text: "Мур! Для початку роботи надішли /start",
-
-                        cancellationToken: cancellationToken
+                    await BotUtils.SendMessageReplacingOldAsync(
+                        bot,
+                        message.Chat.Id,
+                        "Мур! Для початку роботи надішли /start",
+                        null,
+                        userLastMessageIds,
+                        cancellationToken
                     );
                 }
             }
@@ -78,20 +89,16 @@ namespace TelegramBot
                 }
                 else
                 {
-                    await bot.SendMessage(
-                        chatId: callbackQuery.Message.Chat.Id,
-                        text: "Ой-ой! Я не знаю, як це обробити.",
-                        cancellationToken: cancellationToken
+                    await BotUtils.SendMessageReplacingOldAsync(
+                        bot,
+                        callbackQuery.Message.Chat.Id,
+                        "Ой-ой! Я не знаю, як це обробити.",
+                        null,
+                        userLastMessageIds,
+                        cancellationToken
                     );
                 }
             }
         }
-
-        private static Task ErrorHandler(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
-        {
-            Console.WriteLine($"Помилка: {exception.Message}");
-            return Task.CompletedTask;
-        }
     }
-
 }
