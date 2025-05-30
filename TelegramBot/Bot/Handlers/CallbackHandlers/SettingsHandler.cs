@@ -1,15 +1,25 @@
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using TelegramBot.Bot.Handlers.CallbackHandlers;
+using TelegramBot.Bot.Handlers.ICallbackHandlers;
 
-namespace TelegramBot.Bot.Handlers.CallbackHandlers;
 
-public class SettingsHandler : ICallbackHandler
+namespace TelegramBot.Bot.Handlers.CallbackHandlers
 {
-    public bool CanHandle(string data) => data == "B";
-
-    public async Task HandleAsync(ITelegramBotClient bot, CallbackQuery query, Dictionary<long, string> userMoods, CancellationToken cancellationToken)
+   /* public class SettingsHandler : ICallbackHandler
     {
-        await bot.SendTextMessageAsync(query.Message.Chat.Id, "Налаштування ще в розробці :)", cancellationToken: cancellationToken);
-    }
+        public bool CanHandle(string data) => data == "B";
+
+        public async Task HandleAsync(
+     ITelegramBotClient bot,
+     CallbackQuery callbackQuery,
+     Dictionary<long, string> userMoods,
+     Dictionary<long, int> userLastMessageIds,
+     CancellationToken cancellationToken)
+        {
+            await bot.SendMessage(
+                callbackQuery.Message.Chat.Id,
+                "Налаштування ще в розробці :)",
+                cancellationToken: cancellationToken);
+        }
+    }*/
 }

@@ -1,25 +1,28 @@
 using TelegramBot.Bot.Handlers.CallbackHandlers;
+using TelegramBot.Bot.Handlers.ICallbackHandlers;
+using static TelegramBot.Bot.Lib.Methods.BotMethod;
 
 namespace TelegramBot.Bot.Services
 {
     public class CommandRouter
     {
-        private readonly List<ICallbackHandler> _handlers;
+        private readonly List<ICallbackHandler> handlers;
 
         public CommandRouter()
         {
-            _handlers = new List<ICallbackHandler>
+            handlers = new List<ICallbackHandler>
         {
             new MoodHandler(),
-            new SettingsHandler(),
-            new ContentHandler(),
-            new MainMenuHandler()
+            new MainMenuHandler(),
+           // new ContentHandler(),
+          //  new SettingsHandler(),
+            new ClearChatHandler() // ← Додайте цей хендлер
         };
         }
 
         public ICallbackHandler? Route(string data)
         {
-            return _handlers.FirstOrDefault(h => h.CanHandle(data));
+            return handlers.FirstOrDefault(h => h.CanHandle(data));
         }
     }
 }
