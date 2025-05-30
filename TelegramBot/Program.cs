@@ -13,7 +13,7 @@ using TelegramBot.Bot.Services;
 
 namespace TelegramBot
 {
-
+//прибрати 2 файли і перевірка на не start
     class Program
     {
         private static string Token { get; set; } = "7685257153:AAE77imIaHX-T5EyBlCKd8G_H71QI9hAKLA";
@@ -51,10 +51,20 @@ namespace TelegramBot
             {
                 if (message.Text == "/start")
                 {
-                    await bot.SendTextMessageAsync(
+                    await bot.SendMessage(
                         chatId: message.Chat.Id,
                         text: "Привіт! Я MoodCat, твій пухнастий помічник у світі настроїв! Обери, що тобі потрібно:",
                         replyMarkup: Keyboard.MainMenu,
+                        cancellationToken: cancellationToken
+                    );
+                }
+
+                 if (message.Text != "/start")
+                {
+                    await bot.SendMessage(
+                        chatId: message.Chat.Id,
+                        text: "Мур! Для початку роботи надішли /start",
+                        
                         cancellationToken: cancellationToken
                     );
                 }
@@ -69,7 +79,7 @@ namespace TelegramBot
                 }
                 else
                 {
-                    await bot.SendTextMessageAsync(
+                    await bot.SendMessage(
                         chatId: callbackQuery.Message.Chat.Id,
                         text: "Ой-ой! Я не знаю, як це обробити.",
                         cancellationToken: cancellationToken
