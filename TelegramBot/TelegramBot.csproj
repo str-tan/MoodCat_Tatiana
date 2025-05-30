@@ -13,7 +13,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Bot\Lib\" />
     <Folder Include="Bot\Lib\Keyboards\" />
     <Folder Include="Data\" />
   </ItemGroup>

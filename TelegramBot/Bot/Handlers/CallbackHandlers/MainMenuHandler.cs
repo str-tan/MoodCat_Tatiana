@@ -2,15 +2,31 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using TelegramBot.Bot.Handlers.CallbackHandlers;
 using TelegramBot.Bot.Lib.Keyboards;
+using TelegramBot.Bot.Lib.Methods;
+using TelegramBot.Bot.Handlers.ICallbackHandlers;
 
 namespace TelegramBot.Bot.Handlers.CallbackHandlers;
 
 public class MainMenuHandler : ICallbackHandler
 {
-    public bool CanHandle(string data) => data == "F";
+    public bool CanHandle(string data) => data == "F"; // тільки F
 
-    public async Task HandleAsync(ITelegramBotClient bot, CallbackQuery query, Dictionary<long, string> userMoods, CancellationToken cancellationToken)
+    public async Task HandleAsync(
+        ITelegramBotClient bot,
+        CallbackQuery query,
+        Dictionary<long, string> userMoods,
+        Dictionary<long, int> userLastMessageIds,
+        CancellationToken cancellationToken)
     {
-        await bot.SendTextMessageAsync(query.Message.Chat.Id, "Ти у головному меню:", replyMarkup: Keyboard.MainMenu, cancellationToken: cancellationToken);
+        var chatId = query.Message.Chat.Id;
+
+        await BotUtils.SendMessageReplacingOldAsync(
+            bot,
+            chatId,
+            "Ти у головному меню:",
+            Keyboard.MainMenu,
+            userLastMessageIds,
+            cancellationToken
+        );
     }
 }

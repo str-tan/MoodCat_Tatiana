@@ -3,6 +3,11 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace TelegramBot.Bot.Lib.Methods;
 
+using Telegram.Bot.Types;
+using TelegramBot.Bot.Handlers.CallbackHandlers;
+using TelegramBot.Bot.Handlers.ICallbackHandlers;
+using TelegramBot.Bot.Lib.Keyboards;
+
 public static class BotMethod
 {
     public static void SwitchHistory()///
@@ -19,12 +24,7 @@ public static class BotMethod
     {
         throw new NotImplementedException();
     }
-
-    public static void EndSession()
-    {
-        throw new NotImplementedException();///
-    }
-
+    
     public static async Task AskNextAsync(ITelegramBotClient bot, long chatId, CancellationToken cancellationToken)
     {
         var nextOptions = new InlineKeyboardMarkup(new[]
@@ -36,7 +36,7 @@ public static class BotMethod
                 InlineKeyboardButton.WithCallbackData("\U0001F504тип контенту", "HO")
             },
             new[] { InlineKeyboardButton.WithCallbackData("До головного меню", "F") },
-            new[] { InlineKeyboardButton.WithCallbackData("Закрити сесію", "G") }
+           new[] { InlineKeyboardButton.WithCallbackData("Очистити чат", "clear_chat") } // <-- нова кнопка
         });
 
         await bot.SendTextMessageAsync(chatId, "Що далі?", replyMarkup: nextOptions, cancellationToken: cancellationToken);
@@ -87,5 +87,10 @@ public static class BotMethod
         };
 
         await bot.SendTextMessageAsync(chatId, response, cancellationToken: cancellationToken);
+    }
+
+    internal static async Task GenerateContent(object bot, long chatId, string contentType, Dictionary<long, string> userMoods, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }

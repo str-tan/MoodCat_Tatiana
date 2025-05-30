@@ -2,6 +2,7 @@ using System;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
+using TelegramBot.Bot.Handlers.ICallbackHandlers;
 
 
 namespace TelegramBot.Bot.Handlers.CallbackHandlers;
@@ -14,10 +15,11 @@ public class MoodHandler : ICallbackHandler
 
 
     public async Task HandleAsync(
-        ITelegramBotClient bot,
-        CallbackQuery callbackQuery,
-        Dictionary<long, string> userMoods,
-        CancellationToken cancellationToken)
+    ITelegramBotClient bot,
+    CallbackQuery callbackQuery,
+    Dictionary<long, string> userMoods,
+    Dictionary<long, int> userLastMessageIds,
+    CancellationToken cancellationToken)
     {
         var chatId = callbackQuery.Message.Chat.Id;
         var data = callbackQuery.Data;
@@ -34,7 +36,7 @@ public class MoodHandler : ICallbackHandler
                     new[] { InlineKeyboardButton.WithCallbackData("Спокійний", "CO") }
                 });
 
-                await bot.SendTextMessageAsync(
+                await bot.SendMessage(
                     chatId,
                     "Обери свій кото-настрій на сьогодні! 🐾",
                     replyMarkup: moodKeyboard,
@@ -56,7 +58,7 @@ public class MoodHandler : ICallbackHandler
                     new[] { InlineKeyboardButton.WithCallbackData("Фото", "PC") }
                 });
 
-                await bot.SendTextMessageAsync(
+                await bot.SendMessage(
                     chatId,
                     "Ваш настрій зафіксовано! Що бажаєте переглянути?",
                     replyMarkup: contentKeyboard,

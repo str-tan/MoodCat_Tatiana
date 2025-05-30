@@ -10,16 +10,15 @@ using TelegramBot.Bot.Services;
 
 
 
-
 namespace TelegramBot
 {
-//прибрати 2 файли і перевірка на не start
     class Program
     {
         private static string Token { get; set; } = "7685257153:AAE77imIaHX-T5EyBlCKd8G_H71QI9hAKLA";
         private static TelegramBotClient? botClient;
         private static CommandRouter? commandRouter;
         private static Dictionary<long, string> userMoods = new();
+        private static Dictionary<long, int> userLastMessageIds = new();
 
         static async Task Main()
         {
@@ -59,12 +58,12 @@ namespace TelegramBot
                     );
                 }
 
-                 if (message.Text != "/start")
+                if (message.Text != "/start")
                 {
                     await bot.SendMessage(
                         chatId: message.Chat.Id,
                         text: "Мур! Для початку роботи надішли /start",
-                        
+
                         cancellationToken: cancellationToken
                     );
                 }
@@ -75,7 +74,7 @@ namespace TelegramBot
 
                 if (handler != null)
                 {
-                    await handler.HandleAsync(bot, callbackQuery, userMoods, cancellationToken);
+                    await handler.HandleAsync(bot, callbackQuery, userMoods, userLastMessageIds, cancellationToken);
                 }
                 else
                 {
